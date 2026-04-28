@@ -1,0 +1,13 @@
+<resources>
+
+    <!-- Kurdish Mobile Theme Override -->
+    <style name="AppTheme.Mobile" parent="Base.AppTheme.Mobile">
+        <item name="android:fontFamily">@font/rabar</item>
+    </style>
+
+    <!-- Kurdish TV Theme Override -->
+    <style name="AppTheme.Tv" parent="Base.AppTheme.Tv">
+        <item name="android:fontFamily">@font/rabar</item>
+    </style>
+
+</resources>
