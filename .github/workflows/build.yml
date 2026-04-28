@@ -30,6 +30,9 @@ jobs:
           echo "SUBDL_API_KEY=" >> local.properties
           echo "APP_LAYOUT=auto" >> local.properties
 
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+
       - name: Build APKs
         run: ./gradlew assembleDebug -x lint -x test --parallel --no-daemon
 
