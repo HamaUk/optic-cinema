@@ -3,7 +3,7 @@ package com.optic.cinema.utils
 import android.os.Build
 import android.util.Log
 import com.optic.cinema.R
-import com.optic.cinema.Optic CinemaApp
+import com.optic.cinema.OpticCinemaApp
 import java.security.KeyStore
 import java.security.Provider
 import java.security.cert.CertificateFactory
@@ -56,7 +56,7 @@ class IsrgRootTrustProvider : Provider("IsrgRootTrust", 1.0, "Adds ISRG Root X1 
 
             // Add ISRG Root X1
             val cf = CertificateFactory.getInstance("X.509")
-            val isrgCert = Optic CinemaApp.instance.resources.openRawResource(R.raw.isrg_root_x1).use {
+            val isrgCert = OpticCinemaApp.instance.resources.openRawResource(R.raw.isrg_root_x1).use {
                 cf.generateCertificate(it)
             }
             ks.setCertificateEntry("isrg_root_x1", isrgCert)

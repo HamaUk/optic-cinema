@@ -24,6 +24,7 @@ import com.optic.cinema.databinding.ContentHeaderMenuMainTvBinding
 import com.optic.cinema.fragments.player.PlayerTvFragment
 import com.optic.cinema.ui.UpdateAppTvDialog
 import com.optic.cinema.providers.Provider
+import com.optic.cinema.providers.TmdbProvider
 import com.optic.cinema.providers.Cine24hProvider
 import com.optic.cinema.utils.AppLanguageManager
 import com.optic.cinema.utils.ThemeManager
@@ -45,7 +46,7 @@ class MainTvActivity : FragmentActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Il setup delle preferenze è già avvenuto in Optic CinemaApp
+        // Il setup delle preferenze è già avvenuto in OpticCinemaApp
         setTheme(ThemeManager.tvThemeRes(UserPreferences.selectedTheme))
         
         super.onCreate(savedInstanceState)

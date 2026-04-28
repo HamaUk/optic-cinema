@@ -7,7 +7,7 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.media3.common.MimeTypes
-import com.optic.cinema.Optic CinemaApp
+import com.optic.cinema.OpticCinemaApp
 import com.optic.cinema.models.Video
 import com.optic.cinema.utils.DnsResolver
 import kotlinx.coroutines.Dispatchers
@@ -36,7 +36,7 @@ class VidsrcRuExtractor : Extractor() {
     override suspend fun extract(link: String): Video {
         return withContext(Dispatchers.Main) {
             suspendCancellableCoroutine { continuation ->
-                val webView = WebView(Optic CinemaApp.instance.applicationContext)
+                val webView = WebView(OpticCinemaApp.instance.applicationContext)
                 
                 webView.settings.apply {
                     javaScriptEnabled = true

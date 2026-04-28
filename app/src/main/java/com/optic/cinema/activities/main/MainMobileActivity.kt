@@ -31,6 +31,7 @@ import com.optic.cinema.databinding.ActivityMainMobileBinding
 import com.optic.cinema.fragments.player.PlayerMobileFragment
 import com.optic.cinema.providers.Cine24hProvider
 import com.optic.cinema.providers.Provider
+import com.optic.cinema.providers.TmdbProvider
 import com.optic.cinema.ui.UpdateAppMobileDialog
 import com.optic.cinema.utils.AppLanguageManager
 import com.optic.cinema.utils.ProviderChangeNotifier

@@ -7,7 +7,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.tanasi.retrofit_jsoup.converter.JsoupConverterFactory
-import com.optic.cinema.Optic CinemaApp
+import com.optic.cinema.OpticCinemaApp
 import com.optic.cinema.models.Video
 import com.optic.cinema.utils.JsUnpacker
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -113,7 +113,7 @@ open class StreamWishExtractor : Extractor() {
     )
 
     protected var referer = ""
-    val context = Optic CinemaApp.instance.applicationContext
+    val context = OpticCinemaApp.instance.applicationContext
 
     override suspend fun extract(link: String): Video {
         if (referer.isEmpty()) {

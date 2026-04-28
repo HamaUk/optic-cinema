@@ -14,8 +14,8 @@ import kotlin.math.max
 
 object InAppUpdater {
 
-    private const val GITHUB_OWNER = "Optic Cinema-reborn"
-    private const val GITHUB_REPO = "Optic Cinema"
+    private const val GITHUB_OWNER = "HamaUk"
+    private const val GITHUB_REPO = "optic-cinema"
 
     private data class Version(val name: String) : Comparable<Version> {
         override operator fun compareTo(other: Version): Int {

@@ -8,7 +8,7 @@ import com.optic.cinema.extractors.Extractor
 import com.optic.cinema.models.*
 import com.optic.cinema.utils.NetworkClient
 import com.optic.cinema.utils.WebViewResolver
-import com.optic.cinema.Optic CinemaApp
+import com.optic.cinema.OpticCinemaApp
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.sync.Mutex
@@ -32,7 +32,7 @@ object Cine24hProvider : Provider {
     private const val TAG = "Cine24hBypass"
 
     private fun getResolver(): WebViewResolver {
-        return webViewResolver ?: WebViewResolver(Optic CinemaApp.instance).also {
+        return webViewResolver ?: WebViewResolver(OpticCinemaApp.instance).also {
             webViewResolver = it
         }
     }

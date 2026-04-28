@@ -2,7 +2,7 @@ package com.optic.cinema.providers
 
 import android.util.Log
 import androidx.core.net.toUri
-import com.optic.cinema.Optic CinemaApp
+import com.optic.cinema.OpticCinemaApp
 import com.optic.cinema.adapters.AppAdapter
 import com.optic.cinema.extractors.Extractor
 import com.optic.cinema.models.*
@@ -31,7 +31,7 @@ object PoseidonHD2Provider : Provider {
     private var webViewResolver: WebViewResolver? = null
 
     private fun getResolver(): WebViewResolver {
-        return webViewResolver ?: WebViewResolver(Optic CinemaApp.instance).also {
+        return webViewResolver ?: WebViewResolver(OpticCinemaApp.instance).also {
             webViewResolver = it
         }
     }

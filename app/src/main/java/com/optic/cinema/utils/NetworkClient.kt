@@ -19,7 +19,7 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
-import com.optic.cinema.Optic CinemaApp
+import com.optic.cinema.OpticCinemaApp
 import com.optic.cinema.R
 import android.os.Build
 
@@ -113,7 +113,7 @@ object NetworkClient {
                 // and enable older TLS versions just in case.
                 
                 val cf = CertificateFactory.getInstance("X.509")
-                val certInput = Optic CinemaApp.instance.resources.openRawResource(R.raw.isrg_root_x1)
+                val certInput = OpticCinemaApp.instance.resources.openRawResource(R.raw.isrg_root_x1)
                 val isrgCert = certInput.use { cf.generateCertificate(it) }
 
                 val keyStore = KeyStore.getInstance(KeyStore.getDefaultType()).apply {

@@ -6,7 +6,7 @@ import android.net.Uri
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import com.optic.cinema.Optic CinemaApp
+import com.optic.cinema.OpticCinemaApp
 import com.optic.cinema.models.Video
 import com.optic.cinema.utils.JsUnpacker
 import com.tanasi.retrofit_jsoup.converter.JsoupConverterFactory
@@ -32,7 +32,7 @@ class UpzoneExtractor : Extractor() {
         "https://upzone.link"
     )
 
-    private val context: Context = Optic CinemaApp.instance.applicationContext
+    private val context: Context = OpticCinemaApp.instance.applicationContext
     private val userAgent =
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
 

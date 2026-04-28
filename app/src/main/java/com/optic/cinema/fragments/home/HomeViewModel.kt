@@ -1,7 +1,7 @@
 package com.optic.cinema.fragments.home
 
 import android.util.Log
-import com.optic.cinema.Optic CinemaApp
+import com.optic.cinema.OpticCinemaApp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.optic.cinema.adapters.AppAdapter
@@ -369,7 +369,7 @@ class HomeViewModel(database: AppDatabase) : ViewModel() {
             return@launch
         }
         currentProvider = provider
-        val appContext = Optic CinemaApp.instance.applicationContext
+        val appContext = OpticCinemaApp.instance.applicationContext
         val cachedCategories = HomeCacheStore.read(appContext, provider)
         if (!cachedCategories.isNullOrEmpty()) {
             _state.emit(State.SuccessLoading(cachedCategories))
@@ -392,7 +392,7 @@ class HomeViewModel(database: AppDatabase) : ViewModel() {
     }
 
     private fun loadUserDataCache(provider: Provider) {
-        val appContext = Optic CinemaApp.instance.applicationContext
+        val appContext = OpticCinemaApp.instance.applicationContext
         val cached = UserDataCache.read(appContext, provider)
         _userDataCache.value = cached
 

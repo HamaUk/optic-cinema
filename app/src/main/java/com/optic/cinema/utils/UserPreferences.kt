@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.CaptionStyleCompat
-import com.optic.cinema.Optic CinemaApp
+import com.optic.cinema.OpticCinemaApp
 import com.optic.cinema.BuildConfig
 import com.optic.cinema.R
 import com.optic.cinema.fragments.player.settings.PlayerSettingsView
@@ -74,7 +74,7 @@ object UserPreferences {
 
             Key.CURRENT_PROVIDER.setString(value?.name)
             runCatching {
-                ArtworkRepairScheduler.schedule(Optic CinemaApp.instance, value)
+                ArtworkRepairScheduler.schedule(OpticCinemaApp.instance, value)
             }
             // Notify all ViewModels that the provider has changed
             ProviderChangeNotifier.notifyProviderChanged()
@@ -177,7 +177,7 @@ object UserPreferences {
             TMDb3.rebuildService()
             if (value) {
                 runCatching {
-                    ArtworkRepairScheduler.schedule(Optic CinemaApp.instance, currentProvider)
+                    ArtworkRepairScheduler.schedule(OpticCinemaApp.instance, currentProvider)
                 }
             }
         }
