@@ -127,44 +127,18 @@ internal object SettingsListStyler {
                 defaults.paddingBottom,
             )
 
-        val palette = ThemeManager.palette(UserPreferences.selectedTheme)
-        val accentColor = palette.mobileNavActive
-        val isKurdish = UserPreferences.currentLanguage == "ckb"
+            title.setTextColor(defaults.titleColor)
+            title.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaults.titleSizePx)
+            title.typeface = Typeface.DEFAULT
+            title.letterSpacing = 0f
 
-        title.setTextColor(defaults.titleColor)
-        title.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaults.titleSizePx)
-        
-        // Apply Rabar font for Kurdish
-        if (isKurdish) {
-            try {
-                val rabar = androidx.core.content.res.ResourcesCompat.getFont(context, R.font.rabar)
-                title.typeface = rabar
-                summary?.typeface = rabar
-            } catch (e: Exception) {
-                title.typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
+            summary?.apply {
+                visibility = if (text.isNullOrBlank()) View.GONE else View.VISIBLE
+                defaults.summaryColor?.let(::setTextColor)
+                defaults.summarySizePx?.let { setTextSize(TypedValue.COMPLEX_UNIT_PX, it) }
             }
-        } else {
-            title.typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
-        }
-
-        title.letterSpacing = 0f
-
-        summary?.apply {
-            visibility = if (text.isNullOrBlank()) View.GONE else View.VISIBLE
-            defaults.summaryColor?.let(::setTextColor)
-            defaults.summarySizePx?.let { setTextSize(TypedValue.COMPLEX_UNIT_PX, it) }
-        }
-
-        // Style Category Headers
-        if (titleText.length < 30 && summary == null && !hasChevron) {
-            title.setTextColor(accentColor)
-            title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
-            title.setAllCaps(true)
-            title.setPadding(context.dp(8), context.dp(16), context.dp(8), context.dp(8))
-        }
-
-        icon?.imageTintList = ColorStateList.valueOf(accentColor)
-        return
+            icon?.imageTintList = null
+            return
         }
 
         val palette = ThemeManager.palette(UserPreferences.selectedTheme)
@@ -200,19 +174,9 @@ internal object SettingsListStyler {
             context.dp(if (isTv) 18 else 16),
         )
 
-        val isKurdish = UserPreferences.currentLanguage == "ckb"
-        if (isKurdish) {
-            try {
-                val rabar = androidx.core.content.res.ResourcesCompat.getFont(context, R.font.rabar)
-                title.typeface = rabar
-                summary?.typeface = rabar
-            } catch (e: Exception) {
-                title.typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
-            }
-        } else {
-            title.typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
-        }
-
+        title.setTextColor(titleColor)
+        title.setTextSize(TypedValue.COMPLEX_UNIT_SP, if (isTv) 20f else 16f)
+        title.typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
         title.letterSpacing = 0f
 
         summary?.apply {
@@ -234,14 +198,18 @@ internal object SettingsListStyler {
         activeColor: Int,
         activeStrokeColor: Int,
     ): Drawable {
-        val radiusDp = 24
+        val radiusDp = if (isTv) 22 else 18
         val defaultStrokeDp = 1
-        val activeStrokeDp = 1
+        val activeStrokeDp = if (isTv) 2 else 1
 
         return StateListDrawable().apply {
             if (isTv) {
                 addState(
                     intArrayOf(android.R.attr.state_focused),
+                    createRoundedRect(view, activeColor, activeStrokeColor, radiusDp, activeStrokeDp)
+                )
+                addState(
+                    intArrayOf(android.R.attr.state_selected),
                     createRoundedRect(view, activeColor, activeStrokeColor, radiusDp, activeStrokeDp)
                 )
             } else {

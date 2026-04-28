@@ -72,13 +72,13 @@ object ThemeManager {
 
     fun palette(theme: String): Palette = when (theme) {
         NERO_AMOLED_OLED -> Palette(
-            mobileNavBackground = color("#1A1A1A"),
-            mobileNavActive = color("#000000"),
-            mobileNavInactive = color("#AAAAAA"),
+            mobileNavBackground = color("#000000"),
+            mobileNavActive = color("#FFFFFF"),
+            mobileNavInactive = color("#7A7A7A"),
             systemBar = color("#000000"),
-            tvNavBackground = color("#000000"),
-            tvHeaderPrimary = color("#DFFF00"),
-            tvHeaderSecondary = color("#AAAAAA"),
+            tvNavBackground = color("#050505"),
+            tvHeaderPrimary = color("#FFFFFF"),
+            tvHeaderSecondary = color("#BDBDBD"),
         )
         SUNSET_CINEMA -> Palette(
             mobileNavBackground = color("#2B1812"),
@@ -153,13 +153,13 @@ object ThemeManager {
             tvHeaderSecondary = color("#CFB7DA"),
         )
         else -> Palette(
-            mobileNavBackground = color("#1A1A1A"),
-            mobileNavActive = color("#000000"),
-            mobileNavInactive = color("#AAAAAA"),
-            systemBar = color("#000000"),
-            tvNavBackground = color("#000000"),
-            tvHeaderPrimary = color("#DFFF00"),
-            tvHeaderSecondary = color("#AAAAAA"),
+            mobileNavBackground = color("#1E2129"),
+            mobileNavActive = color("#C6C6C6"),
+            mobileNavInactive = color("#808080"),
+            systemBar = color("#1E2129"),
+            tvNavBackground = color("#181818"),
+            tvHeaderPrimary = color("#FFFFFF"),
+            tvHeaderSecondary = color("#B3FFFFFF"),
         )
     }
 

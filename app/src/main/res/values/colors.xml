@@ -3,17 +3,17 @@
     <color name="black">#000000</color>
     
     <!-- Modern Midnight Palette -->
-    <color name="app_background">#000000</color>
-    <color name="surface_color">#1A1A1A</color>
+    <color name="app_background">#0A0F1D</color>
+    <color name="surface_color">#161B2E</color>
     <color name="surface_variant">#1E253A</color>
     
-    <color name="colorPrimary">#DFFF00</color>
-    <color name="colorPrimaryVariant">#C0E600</color>
-    <color name="colorAccent">#DFFF00</color>
+    <color name="colorPrimary">#1E88E5</color>
+    <color name="colorPrimaryDark">#0D47A1</color>
+    <color name="colorAccent">#64B5F6</color>
     
-    <color name="text_primary">#FFFFFF</color>
-    <color name="text_secondary">#AAAAAA</color>
-    <color name="text_muted">#666666</color>
+    <color name="text_primary">#F4F7FF</color>
+    <color name="text_secondary">#94A3B8</color>
+    <color name="text_muted">#64748B</color>
 
     <color name="ic_launcher_background">#0A0F1D</color>
     <color name="ic_banner_background">#0A0F1D</color>

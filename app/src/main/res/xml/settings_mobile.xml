@@ -7,7 +7,6 @@
         android:title="@string/settings_section_content_title"
         android:summary="@string/settings_screen_content_summary"
         android:widgetLayout="@layout/preference_widget_chevron"
-        android:icon="@drawable/ic_menu_movie"
         app:iconSpaceReserved="false">
 
         <PreferenceCategory
@@ -83,7 +82,6 @@
         android:title="@string/player_settings"
         android:summary="@string/settings_screen_playback_summary"
         android:widgetLayout="@layout/preference_widget_chevron"
-        android:icon="@drawable/ic_player_settings_playback_speed"
         app:iconSpaceReserved="false">
 
         <PreferenceCategory
@@ -173,7 +171,6 @@
         android:title="@string/settings_category_appearance"
         android:summary="@string/settings_screen_appearance_summary"
         android:widgetLayout="@layout/preference_widget_chevron"
-        android:icon="@drawable/ic_brightness"
         app:iconSpaceReserved="false">
 
         <PreferenceCategory
@@ -208,7 +205,6 @@
         android:title="@string/settings_category_network_title"
         android:summary="@string/settings_screen_network_summary"
         android:widgetLayout="@layout/preference_widget_chevron"
-        android:icon="@drawable/ic_providers_language"
         app:iconSpaceReserved="false">
 
         <PreferenceCategory
@@ -253,7 +249,6 @@
         android:title="@string/backup_category_title"
         android:summary="@string/settings_screen_backup_summary"
         android:widgetLayout="@layout/preference_widget_chevron"
-        android:icon="@drawable/ic_refresh"
         app:iconSpaceReserved="false">
 
         <PreferenceCategory
