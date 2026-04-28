@@ -5,7 +5,6 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@color/app_background</item>
         <item name="app_background_color">@color/app_background</item>
-        <item name="android:animateLayoutChanges">true</item>
         <item name="home_gradient_drawable">@drawable/bg_home_gradient_default</item>
         <item name="movie_banner_gradient_drawable">@drawable/bg_movie_banner_gradient_default</item>
         <item name="tv_show_banner_gradient_drawable">@drawable/bg_tv_show_banner_gradient_default</item>
