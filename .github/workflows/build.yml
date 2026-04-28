@@ -25,7 +25,7 @@ jobs:
 
       - name: Config
         run: |
-          echo "TMDB_API_KEY=" > local.properties
+          echo "TMDB_API_KEY=80ab7e17810930a03bcaeba6c98aa656" > local.properties
           echo "RABBITSTREAM_SOURCE_API=" >> local.properties
           echo "SUBDL_API_KEY=" >> local.properties
           echo "APP_LAYOUT=auto" >> local.properties
