@@ -1,6 +1,7 @@
 package com.optic.cinema.fragments.settings
 
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.ColorUtils
 import androidx.recyclerview.widget.RecyclerView
 import com.optic.cinema.R
@@ -129,33 +131,43 @@ internal object SettingsListStyler {
 
             title.setTextColor(defaults.titleColor)
             title.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaults.titleSizePx)
-            title.typeface = Typeface.DEFAULT
+            try {
+                title.typeface = ResourcesCompat.getFont(context, R.font.rabar)
+            } catch (e: Exception) {
+                title.typeface = Typeface.DEFAULT
+            }
             title.letterSpacing = 0f
 
             summary?.apply {
                 visibility = if (text.isNullOrBlank()) View.GONE else View.VISIBLE
                 defaults.summaryColor?.let(::setTextColor)
                 defaults.summarySizePx?.let { setTextSize(TypedValue.COMPLEX_UNIT_PX, it) }
+                try {
+                    typeface = ResourcesCompat.getFont(context, R.font.rabar)
+                } catch (e: Exception) {
+                    typeface = Typeface.DEFAULT
+                }
             }
             icon?.imageTintList = null
             return
         }
 
         val palette = ThemeManager.palette(UserPreferences.selectedTheme)
-        val surfaceColor = resolveThemeColor(view, R.attr.app_background_color, 0xFF181818.toInt())
         val titleColor = palette.tvHeaderPrimary
         val summaryColor = palette.tvHeaderSecondary
         val accentColor = palette.mobileNavActive
-        val rowBackgroundColor = ColorUtils.blendARGB(surfaceColor, titleColor, if (isTv) 0.09f else 0.07f)
-        val rowBorderColor = ColorUtils.blendARGB(surfaceColor, summaryColor, 0.42f)
-        val rowHighlightColor = ColorUtils.blendARGB(surfaceColor, accentColor, if (isTv) 0.22f else 0.18f)
-        val rowHighlightBorderColor = ColorUtils.blendARGB(surfaceColor, accentColor, 0.62f)
+        
+        // Modern Premium Frosted Glass Effect
+        val rowBackgroundColor = Color.parseColor("#15FFFFFF") // Slight white translucency
+        val rowBorderColor = Color.parseColor("#25FFFFFF")
+        val rowHighlightColor = ColorUtils.blendARGB(rowBackgroundColor, accentColor, 0.3f)
+        val rowHighlightBorderColor = ColorUtils.blendARGB(rowBorderColor, accentColor, 0.5f)
 
         layoutParams?.setMargins(
-            context.dp(if (isTv) 28 else 16),
-            context.dp(if (isTv) 8 else 6),
-            context.dp(if (isTv) 28 else 16),
-            context.dp(if (isTv) 8 else 6),
+            context.dp(if (isTv) 28 else 20),
+            context.dp(if (isTv) 8 else 8),
+            context.dp(if (isTv) 28 else 20),
+            context.dp(if (isTv) 8 else 8),
         )
         view.layoutParams = layoutParams
         view.background = createRowBackground(
@@ -176,13 +188,21 @@ internal object SettingsListStyler {
 
         title.setTextColor(titleColor)
         title.setTextSize(TypedValue.COMPLEX_UNIT_SP, if (isTv) 20f else 16f)
-        title.typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
+        try {
+            title.typeface = ResourcesCompat.getFont(context, R.font.rabar)
+        } catch (e: Exception) {
+            title.typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
+        }
         title.letterSpacing = 0f
 
         summary?.apply {
             setTextColor(summaryColor)
             setTextSize(TypedValue.COMPLEX_UNIT_SP, if (isTv) 14f else 13f)
             maxLines = 2
+            try {
+                typeface = ResourcesCompat.getFont(context, R.font.rabar)
+            } catch (e: Exception) {
+            }
         }
 
         icon?.drawable?.let {
@@ -198,7 +218,7 @@ internal object SettingsListStyler {
         activeColor: Int,
         activeStrokeColor: Int,
     ): Drawable {
-        val radiusDp = if (isTv) 22 else 18
+        val radiusDp = if (isTv) 26 else 22 // Softer, more modern rounded corners
         val defaultStrokeDp = 1
         val activeStrokeDp = if (isTv) 2 else 1
 
