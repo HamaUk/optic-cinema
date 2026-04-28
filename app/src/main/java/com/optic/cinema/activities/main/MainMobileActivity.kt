@@ -575,7 +575,6 @@ class MainMobileActivity : FragmentActivity() {
         colorNavSelected = android.graphics.Color.WHITE
         colorNavUnselected = palette.mobileNavInactive
 
-        binding.customBottomNav.setCardBackgroundColor(palette.mobileNavBackground)
         binding.activeIndicator.backgroundTintList = ColorStateList.valueOf(palette.mobileNavActive)
 
         // Initial apply colors
