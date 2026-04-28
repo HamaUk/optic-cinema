@@ -576,7 +576,7 @@ class MainMobileActivity : FragmentActivity() {
         colorNavUnselected = palette.mobileNavInactive
 
         binding.customBottomNav.setCardBackgroundColor(palette.mobileNavBackground)
-        binding.activeIndicator.backgroundTintList = ColorStateList.valueOf(palette.colorAccent)
+        binding.activeIndicator.backgroundTintList = ColorStateList.valueOf(palette.mobileNavActive)
 
         // Initial apply colors
         listOf(binding.navSearch, binding.navHome, binding.navMovies, binding.navTvShows, binding.navSettings).forEach {
