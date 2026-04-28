@@ -6,6 +6,14 @@
     <dimen name="movies_spacing">16dp</dimen>
     <dimen name="tv_shows_spacing">16dp</dimen>
     <dimen name="genre_spacing">16dp</dimen>
-
     <dimen name="season_episodes_spacing">30dp</dimen>
+    
+    <!-- Modern UI Dimensions -->
+    <dimen name="corner_radius_small">8dp</dimen>
+    <dimen name="corner_radius_medium">16dp</dimen>
+    <dimen name="corner_radius_large">24dp</dimen>
+    <dimen name="corner_radius_xlarge">32dp</dimen>
+    
+    <dimen name="card_elevation">4dp</dimen>
+    <dimen name="button_height">56dp</dimen>
 </resources>

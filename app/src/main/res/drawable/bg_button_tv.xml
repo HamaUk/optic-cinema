@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-
     <item android:state_focused="true">
         <shape android:shape="rectangle">
-            <corners android:radius="360dp" />
-            <solid android:color="#FFFFFF" />
+            <corners android:radius="@dimen/corner_radius_medium" />
+            <gradient
+                android:angle="0"
+                android:endColor="@color/colorPrimary"
+                android:startColor="@color/colorAccent"
+                android:type="linear" />
+            <stroke
+                android:width="2dp"
+                android:color="@color/white" />
         </shape>
     </item>
-
     <item>
         <shape android:shape="rectangle">
-            <corners android:radius="360dp" />
-            <solid android:color="#80808080" />
+            <corners android:radius="@dimen/corner_radius_medium" />
+            <solid android:color="@color/surface_variant" />
         </shape>
     </item>
-
 </selector>

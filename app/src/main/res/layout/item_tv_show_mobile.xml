@@ -5,12 +5,13 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/iv_tv_show_poster"
         android:layout_width="0dp"
         android:layout_height="200dp"
         android:scaleType="centerCrop"
         android:importantForAccessibility="no"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.App.Rounded"
         app:layout_constraintDimensionRatio="2:3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -80,7 +81,7 @@
         android:ellipsize="end"
         android:gravity="center_horizontal"
         android:lines="2"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/text_primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
