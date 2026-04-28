@@ -22,8 +22,10 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bnv_main"
+        style="@style/Widget.Material3.BottomNavigationView"
+        android:theme="@style/Theme.BottomNav"
         android:layout_width="0dp"
-        android:layout_height="64dp"
+        android:layout_height="72dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
@@ -33,7 +35,7 @@
         android:paddingTop="4dp"
         app:itemIconTint="@color/nav_item_app"
         app:itemTextColor="@color/nav_item_app"
-        app:itemRippleColor="@color/colorAccent"
+        app:itemRippleColor="@null"
         app:itemTextAppearanceActive="@style/BottomNavLabelStyle"
         app:itemTextAppearanceInactive="@style/BottomNavLabelStyle"
         app:labelVisibilityMode="selected"
