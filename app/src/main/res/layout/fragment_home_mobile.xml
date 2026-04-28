@@ -47,6 +47,7 @@
         android:id="@+id/iv_provider_logo"
         android:layout_width="60dp"
         android:layout_height="0dp"
+        android:visibility="gone"
         android:background="@drawable/bg_provider_logo_home_mobile"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
