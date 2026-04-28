@@ -20,24 +20,38 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/nav_main_graph_mobile" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bnv_main"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cv_bnv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/bg_floating_nav"
-        android:elevation="8dp"
-        android:theme="@style/Theme.AppCompat"
-        app:itemIconTint="@color/nav_item_app"
-        app:itemTextColor="@color/nav_item_app"
-        app:itemTextAppearanceActive="@style/BottomNavLabelStyle"
-        app:itemTextAppearanceInactive="@style/BottomNavLabelStyle"
-        app:labelVisibilityMode="labeled"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        app:cardBackgroundColor="@color/surface_color"
+        app:cardCornerRadius="30dp"
+        app:cardElevation="12dp"
+        app:strokeWidth="1dp"
+        app:strokeColor="#33FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/menu_main_activity_mobile" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bnv_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            app:itemIconTint="@color/nav_item_app"
+            app:itemTextColor="@color/nav_item_app"
+            app:itemTextAppearanceActive="@style/BottomNavLabelStyle"
+            app:itemTextAppearanceInactive="@style/BottomNavLabelStyle"
+            app:itemActiveIndicatorStyle="@style/AppTheme.Widget.BottomNav.Indicator"
+            app:itemRippleColor="#20FFFFFF"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/menu_main_activity_mobile" />
+
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
