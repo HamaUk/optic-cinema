@@ -20,28 +20,91 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/nav_main_graph_mobile" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bnv_main"
-        style="@style/Widget.Material3.BottomNavigationView"
-        android:theme="@style/Theme.BottomNav"
+    <!-- Custom Animated Floating Bottom Navigation Bar -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/custom_bottom_nav"
         android:layout_width="0dp"
-        android:layout_height="72dp"
+        android:layout_height="70dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
-        android:background="@drawable/bg_floating_nav"
-        android:elevation="16dp"
-        android:paddingBottom="4dp"
-        android:paddingTop="4dp"
-        app:itemIconTint="@color/nav_item_app"
-        app:itemTextColor="@color/nav_item_app"
-        app:itemRippleColor="@null"
-        app:itemTextAppearanceActive="@style/BottomNavLabelStyle"
-        app:itemTextAppearanceInactive="@style/BottomNavLabelStyle"
-        app:labelVisibilityMode="selected"
+        app:cardBackgroundColor="#1AFFFFFF"
+        app:strokeWidth="1dp"
+        app:strokeColor="#4DFFFFFF"
+        app:cardCornerRadius="35dp"
+        app:cardElevation="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/menu_main_activity_mobile" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- The Sliding Animated Indicator -->
+            <View
+                android:id="@+id/activeIndicator"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="0dp"
+                android:background="@drawable/bg_animated_indicator" />
+
+            <!-- The Icons Container -->
+            <LinearLayout
+                android:id="@+id/navItemsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <ImageView
+                    android:id="@+id/navSearch"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="22dp"
+                    android:src="@drawable/ic_menu_search"
+                    app:tint="@color/text_muted" />
+
+                <ImageView
+                    android:id="@+id/navHome"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="22dp"
+                    android:src="@drawable/ic_menu_home"
+                    app:tint="@color/text_muted" />
+
+                <ImageView
+                    android:id="@+id/navMovies"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="22dp"
+                    android:src="@drawable/ic_menu_movie"
+                    app:tint="@color/text_muted" />
+
+                <ImageView
+                    android:id="@+id/navTvShows"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="22dp"
+                    android:src="@drawable/ic_menu_tv"
+                    app:tint="@color/text_muted" />
+
+                <ImageView
+                    android:id="@+id/navSettings"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="22dp"
+                    android:src="@drawable/ic_menu_settings"
+                    app:tint="@color/text_muted" />
+
+            </LinearLayout>
+        </FrameLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

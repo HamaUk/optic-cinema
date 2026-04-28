@@ -1,5 +1,7 @@
 package com.optic.cinema.activities.main
 
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -8,6 +10,9 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewTreeObserver
+import android.view.animation.OvershootInterpolator
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -91,6 +96,10 @@ class MainMobileActivity : FragmentActivity() {
 
     private var updateAppDialog: UpdateAppMobileDialog? = null
 
+    private var selectedNavId = R.id.home
+    private var colorNavSelected = 0
+    private var colorNavUnselected = 0
+
     override fun attachBaseContext(newBase: android.content.Context) {
         super.attachBaseContext(AppLanguageManager.wrap(newBase))
     }
@@ -117,7 +126,7 @@ class MainMobileActivity : FragmentActivity() {
             val currentFragment = navHostFragment?.childFragmentManager?.primaryNavigationFragment
 
             val isPlayer = currentFragment is PlayerMobileFragment
-            val isBottomNavVisible = binding.bnvMain.visibility == View.VISIBLE
+            val isBottomNavVisible = binding.customBottomNav.visibility == View.VISIBLE
 
             val bottomPadding = if (isPlayer || isBottomNavVisible) 0 else insets.bottom
             val topPadding = if (isPlayer) 0 else insets.top
@@ -161,13 +170,14 @@ class MainMobileActivity : FragmentActivity() {
 
         viewModel.checkUpdate()
 
-        binding.bnvMain.setupWithNavController(navController)
+        setupCustomBottomNavigation(navController)
         updateNavigationVisibility()
         updateBottomNavigationVisibility(navController.currentDestination?.id)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             updateNavigationVisibility(destination.id)
             updateBottomNavigationVisibility(destination.id)
+            syncBottomNavigationState(destination.id)
             binding.mainContent.post { binding.mainContent.requestApplyInsets() }
         }
 
@@ -280,7 +290,7 @@ class MainMobileActivity : FragmentActivity() {
     private fun updateBottomNavigationVisibility(destinationId: Int?) {
         val showBottomNav =
             UserPreferences.currentProvider != null && isTopLevelProviderDestination(destinationId)
-        binding.bnvMain.visibility = if (showBottomNav) View.VISIBLE else View.GONE
+        binding.customBottomNav.visibility = if (showBottomNav) View.VISIBLE else View.GONE
     }
 
     private fun updateNavigationVisibility(currentDestinationId: Int? = null) {
@@ -288,15 +298,15 @@ class MainMobileActivity : FragmentActivity() {
         val supportsMovies = Provider.supportsMovies(provider)
         val supportsTvShows = Provider.supportsTvShows(provider)
 
-        binding.bnvMain.menu.findItem(R.id.movies)?.isVisible = supportsMovies
-        binding.bnvMain.menu.findItem(R.id.tv_shows)?.apply {
-            isVisible = supportsTvShows
-            title = if (provider.name == "CableVisionHD" || provider.name == "TvporinternetHD"|| provider.name == "IPTV Spain"|| provider.name == "IPTV-All World"|| provider.name == "Tv Libre Futbol") {
-                getString(R.string.main_menu_all_channels)
-            } else {
-                getString(R.string.main_menu_tv_shows)
-            }
-        }
+        binding.navMovies.visibility = if (supportsMovies) View.VISIBLE else View.GONE
+        binding.navTvShows.visibility = if (supportsTvShows) View.VISIBLE else View.GONE
+        
+        var count = 3 // search, home, settings
+        if (supportsMovies) count++
+        if (supportsTvShows) count++
+        binding.navItemsLayout.weightSum = count.toFloat()
+
+        binding.navItemsLayout.post { syncBottomNavigationState(selectedNavId) }
 
         val navHost =
             supportFragmentManager.findFragmentById(R.id.nav_main_fragment) as? NavHostFragment
@@ -562,20 +572,16 @@ class MainMobileActivity : FragmentActivity() {
 
     private fun applyThemeNavigationChrome() {
         val palette = ThemeManager.palette(UserPreferences.selectedTheme)
-        val navColors = ColorStateList(
-            arrayOf(
-                intArrayOf(android.R.attr.state_checked),
-                intArrayOf(),
-            ),
-            intArrayOf(
-                palette.mobileNavActive,
-                palette.mobileNavInactive,
-            )
-        )
+        colorNavSelected = android.graphics.Color.WHITE
+        colorNavUnselected = palette.mobileNavInactive
 
-        binding.bnvMain.setBackgroundColor(palette.mobileNavBackground)
-        binding.bnvMain.itemIconTintList = navColors
-        binding.bnvMain.itemTextColor = navColors
+        binding.customBottomNav.setCardBackgroundColor(palette.mobileNavBackground)
+        binding.activeIndicator.backgroundTintList = ColorStateList.valueOf(palette.colorAccent)
+
+        // Initial apply colors
+        listOf(binding.navSearch, binding.navHome, binding.navMovies, binding.navTvShows, binding.navSettings).forEach {
+            it.setColorFilter(colorNavUnselected)
+        }
 
         window.statusBarColor = palette.systemBar
         window.navigationBarColor = palette.systemBar
@@ -583,6 +589,87 @@ class MainMobileActivity : FragmentActivity() {
         WindowInsetsControllerCompat(window, window.decorView).apply {
             isAppearanceLightStatusBars = false
             isAppearanceLightNavigationBars = false
+        }
+    }
+
+    private fun setupCustomBottomNavigation(navController: androidx.navigation.NavController) {
+        val navItems = mapOf(
+            R.id.search to binding.navSearch,
+            R.id.home to binding.navHome,
+            R.id.movies to binding.navMovies,
+            R.id.tv_shows to binding.navTvShows,
+            R.id.settings to binding.navSettings
+        )
+
+        binding.navHome.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                binding.navHome.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                syncBottomNavigationState(selectedNavId)
+            }
+        })
+
+        navItems.forEach { (navId, imageView) ->
+            imageView.setOnClickListener {
+                if (selectedNavId != navId) {
+                    navController.navigate(
+                        navId,
+                        null,
+                        navOptions {
+                            launchSingleTop = true
+                            popUpTo(R.id.providers) { inclusive = true }
+                        }
+                    )
+                }
+            }
+        }
+    }
+
+    private fun syncBottomNavigationState(destinationId: Int?) {
+        if (destinationId == null || !isTopLevelProviderDestination(destinationId)) return
+        selectedNavId = destinationId
+
+        val navItems = mapOf(
+            R.id.search to binding.navSearch,
+            R.id.home to binding.navHome,
+            R.id.movies to binding.navMovies,
+            R.id.tv_shows to binding.navTvShows,
+            R.id.settings to binding.navSettings
+        )
+
+        val targetItem = navItems[selectedNavId] ?: return
+
+        if (targetItem.visibility != View.VISIBLE) return
+
+        if (targetItem.width > 0) {
+            val indicatorWidth = binding.activeIndicator.width
+            val targetX = targetItem.x + (targetItem.width / 2f) - (indicatorWidth / 2f)
+
+            binding.activeIndicator.animate()
+                .x(targetX)
+                .setDuration(400)
+                .setInterpolator(OvershootInterpolator(1.2f))
+                .start()
+        }
+
+        navItems.forEach { (navId, imageView) ->
+            val isSelected = navId == selectedNavId
+            val scale = if (isSelected) 1.2f else 1.0f
+
+            imageView.animate()
+                .scaleX(scale)
+                .scaleY(scale)
+                .setDuration(300)
+                .start()
+
+            val currentColor = if (isSelected) colorNavUnselected else colorNavSelected
+            val targetColor = if (isSelected) colorNavSelected else colorNavUnselected
+
+            val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), currentColor, targetColor)
+            colorAnimation.duration = 300
+            colorAnimation.addUpdateListener { animator ->
+                imageView.setColorFilter(animator.animatedValue as Int)
+            }
+            colorAnimation.start()
         }
     }
 }
