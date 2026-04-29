@@ -69,15 +69,22 @@
         android:usesCleartextTraffic="true">
 
         <activity
+            android:name=".activities.main.SplashActivity"
+            android:exported="true"
+            android:theme="@style/AppTheme.Mobile.NeroAmoledOled">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".activities.main.MainMobileActivity"
             android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize"
             android:exported="true"
             android:supportsPictureInPicture="true"
-            android:theme="@style/AppTheme.SplashScreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:theme="@style/AppTheme.Mobile">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
 
@@ -103,10 +110,6 @@
             android:name=".activities.main.MainTvActivity"
             android:exported="true"
             android:theme="@style/AppTheme.Tv">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <provider

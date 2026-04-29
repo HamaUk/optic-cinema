@@ -812,10 +812,6 @@ class PlayerTvFragment : Fragment() {
                 ).show()
             }
 
-            binding.pvPlayer.controller.binding.exoReplay.setOnClickListener {
-                player.seekTo(0)
-            }
-
             binding.pvPlayer.controller.binding.exoProgress.setKeyTimeIncrement(10_000)
 
             binding.pvPlayer.controller.binding.btnExoAspectRatio.setOnClickListener {
@@ -1631,6 +1627,8 @@ class PlayerTvFragment : Fragment() {
             return baseBuilder
                 .setMediaSourceFactory(DefaultMediaSourceFactory(dataSourceFactory))
                 .setLoadControl(loadControl)
+                .setSeekForwardIncrementMs(10_000)
+                .setSeekBackIncrementMs(10_000)
                 .build()
         }
 
