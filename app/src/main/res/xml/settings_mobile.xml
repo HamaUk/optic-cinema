@@ -17,7 +17,7 @@
 
         <ListPreference
             android:key="APP_LANGUAGE"
-            android:title="@string/settings_app_language"
+            android:title="@string/settings_app_language_title"
             android:summary="%s"
             app:iconSpaceReserved="false" />
 
