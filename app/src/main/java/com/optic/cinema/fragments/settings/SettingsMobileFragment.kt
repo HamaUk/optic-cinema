@@ -384,11 +384,11 @@ class SettingsMobileFragment : PreferenceFragmentCompat() {
 
         findPreference<Preference>("p_settings_telegram")?.setOnPreferenceClickListener {
             try {
-                val tgIntent = Intent(Intent.ACTION_VIEW, Uri.parse("tg://resolve?domain=Optic Cinemareborn"))
+                val tgIntent = Intent(Intent.ACTION_VIEW, Uri.parse("tg://resolve?domain=Opt1c_gh0st"))
                 startActivity(tgIntent)
             } catch (e: Exception) {
                 Toast.makeText(requireContext(), "Telegram not found.", Toast.LENGTH_SHORT).show()
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/Optic Cinemareborn"))
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/Opt1c_gh0st"))
                 startActivity(intent)
             }
             true

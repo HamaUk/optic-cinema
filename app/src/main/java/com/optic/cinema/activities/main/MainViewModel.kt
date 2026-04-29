@@ -34,29 +34,7 @@ class MainViewModel : ViewModel() {
 
 
     fun checkUpdate() = viewModelScope.launch(Dispatchers.IO) {
-        if (!UserPreferences.updateCheckEnabled) return@launch
-        _state.emit(State.CheckingUpdate)
-
-        try {
-            val newReleases = InAppUpdater.getNewReleases()
-            if (newReleases.isEmpty()) return@launch
-
-            val asset = newReleases.first().assets
-                .filter { it.contentType == "application/vnd.android.package-archive" }
-                .find {
-                    when (BuildConfig.APP_LAYOUT) {
-                        "mobile" -> it.name.endsWith("-mobile.apk")
-                        "tv" -> it.name.endsWith("-tv.apk")
-                        else -> !it.name.endsWith("-mobile.apk") && !it.name.endsWith("-tv.apk")
-                    }
-                }
-                ?: throw Exception("Can't find update APK")
-
-            _state.emit(State.SuccessCheckingUpdate(newReleases, asset))
-        } catch (e: Exception) {
-            Log.e("MainViewModel", "checkUpdate: ", e)
-            _state.emit(State.FailedUpdate(e))
-        }
+        return@launch
     }
 
     fun downloadUpdate(
