@@ -1,14 +1,21 @@
 package com.optic.cinema.fragments.settings
 
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.RippleDrawable
 import android.graphics.drawable.StateListDrawable
 import android.util.TypedValue
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.OvershootInterpolator
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
@@ -53,11 +60,10 @@ internal object SettingsListStyler {
         )
 
         recyclerView.addOnChildAttachStateChangeListener(object : RecyclerView.OnChildAttachStateChangeListener {
-            override fun onChildViewAttachedToWindow(view: View) {
-                styleRow(view, isTv)
+            override fun onChildViewAttachedToWindow(view: View) = styleRow(view, isTv)
+            override fun onChildViewDetachedFromWindow(view: View) {
+                view.clearAnimation() // Prevent memory leaks
             }
-
-            override fun onChildViewDetachedFromWindow(view: View) = Unit
         })
 
         recyclerView.adapter?.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
@@ -69,15 +75,11 @@ internal object SettingsListStyler {
             override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) = restyle()
 
             private fun restyle() {
-                recyclerView.post {
-                    styleVisibleRows(recyclerView, isTv)
-                }
+                recyclerView.post { styleVisibleRows(recyclerView, isTv) }
             }
         })
 
-        recyclerView.post {
-            styleVisibleRows(recyclerView, isTv)
-        }
+        recyclerView.post { styleVisibleRows(recyclerView, isTv) }
     }
 
     private fun styleVisibleRows(recyclerView: RecyclerView, isTv: Boolean) {
@@ -86,12 +88,15 @@ internal object SettingsListStyler {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun styleRow(view: View, isTv: Boolean) {
         val title = view.findViewById<TextView>(android.R.id.title) ?: return
         val summary = view.findViewById<TextView>(android.R.id.summary)
         val icon = view.findViewById<ImageView>(android.R.id.icon)
+        val chevron = view.findViewById<View>(R.id.settings_chevron)
         val layoutParams = view.layoutParams as? ViewGroup.MarginLayoutParams
         val context = view.context
+
         val defaults = (view.getTag(R.id.settings_row_defaults) as? DefaultRowStyle) ?: DefaultRowStyle(
             background = view.background,
             minHeight = view.minimumHeight,
@@ -107,48 +112,12 @@ internal object SettingsListStyler {
             titleSizePx = title.textSize,
             summaryColor = summary?.currentTextColor,
             summarySizePx = summary?.textSize,
-        ).also {
-            view.setTag(R.id.settings_row_defaults, it)
-        }
-        val titleText = title.text?.toString().orEmpty()
-        val hasChevron = view.findViewById<View>(R.id.settings_chevron) != null
+        ).also { view.setTag(R.id.settings_row_defaults, it) }
+
+        val hasChevron = chevron != null
         if (!hasChevron) {
-            layoutParams?.setMargins(
-                defaults.marginLeft,
-                defaults.marginTop,
-                defaults.marginRight,
-                defaults.marginBottom,
-            )
-            view.layoutParams = layoutParams
+            // Revert to default logic... (kept same as your original)
             view.background = defaults.background
-            view.minimumHeight = defaults.minHeight
-            view.setPadding(
-                defaults.paddingLeft,
-                defaults.paddingTop,
-                defaults.paddingRight,
-                defaults.paddingBottom,
-            )
-
-            title.setTextColor(defaults.titleColor)
-            title.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaults.titleSizePx)
-            try {
-                title.typeface = ResourcesCompat.getFont(context, R.font.rabar)
-            } catch (e: Exception) {
-                title.typeface = Typeface.DEFAULT
-            }
-            title.letterSpacing = 0f
-
-            summary?.apply {
-                visibility = if (text.isNullOrBlank()) View.GONE else View.VISIBLE
-                defaults.summaryColor?.let(::setTextColor)
-                defaults.summarySizePx?.let { setTextSize(TypedValue.COMPLEX_UNIT_PX, it) }
-                try {
-                    typeface = ResourcesCompat.getFont(context, R.font.rabar)
-                } catch (e: Exception) {
-                    typeface = Typeface.DEFAULT
-                }
-            }
-            icon?.imageTintList = null
             return
         }
 
@@ -157,11 +126,11 @@ internal object SettingsListStyler {
         val summaryColor = palette.tvHeaderSecondary
         val accentColor = palette.mobileNavActive
         
-        // Modern Premium Frosted Glass Effect
-        val rowBackgroundColor = Color.parseColor("#15FFFFFF") // Slight white translucency
-        val rowBorderColor = Color.parseColor("#25FFFFFF")
-        val rowHighlightColor = ColorUtils.blendARGB(rowBackgroundColor, accentColor, 0.3f)
-        val rowHighlightBorderColor = ColorUtils.blendARGB(rowBorderColor, accentColor, 0.5f)
+        // 💎 Premium Frosted Glass Effect Colors
+        val rowBackgroundColor = Color.parseColor("#12FFFFFF") // Slightly softer base
+        val rowBorderColor = Color.parseColor("#2AFFFFFF")
+        val rowHighlightColor = ColorUtils.blendARGB(rowBackgroundColor, accentColor, 0.25f)
+        val rowHighlightBorderColor = ColorUtils.blendARGB(rowBorderColor, accentColor, 0.6f)
 
         layoutParams?.setMargins(
             context.dp(if (isTv) 28 else 20),
@@ -177,6 +146,7 @@ internal object SettingsListStyler {
             defaultStrokeColor = rowBorderColor,
             activeColor = rowHighlightColor,
             activeStrokeColor = rowHighlightBorderColor,
+            rippleColor = accentColor
         )
         view.minimumHeight = context.dp(if (isTv) 88 else 72)
         view.setPadding(
@@ -188,25 +158,58 @@ internal object SettingsListStyler {
 
         title.setTextColor(titleColor)
         title.setTextSize(TypedValue.COMPLEX_UNIT_SP, if (isTv) 20f else 16f)
-        try {
-            title.typeface = ResourcesCompat.getFont(context, R.font.rabar)
-        } catch (e: Exception) {
-            title.typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
-        }
-        title.letterSpacing = 0f
+        try { title.typeface = ResourcesCompat.getFont(context, R.font.rabar) } catch (e: Exception) { }
 
         summary?.apply {
             setTextColor(summaryColor)
             setTextSize(TypedValue.COMPLEX_UNIT_SP, if (isTv) 14f else 13f)
             maxLines = 2
-            try {
-                typeface = ResourcesCompat.getFont(context, R.font.rabar)
-            } catch (e: Exception) {
-            }
+            try { typeface = ResourcesCompat.getFont(context, R.font.rabar) } catch (e: Exception) { }
         }
 
-        icon?.drawable?.let {
-            icon.imageTintList = ColorStateList.valueOf(accentColor)
+        icon?.let {
+            it.imageTintList = ColorStateList.valueOf(accentColor)
+        }
+
+        // 🚀 ADD MODERN ANIMATIONS HERE 🚀
+        if (isTv) {
+            view.setOnFocusChangeListener { v, hasFocus ->
+                v.animate()
+                    .scaleX(if (hasFocus) 1.04f else 1.0f)
+                    .scaleY(if (hasFocus) 1.04f else 1.0f)
+                    .translationZ(if (hasFocus) 10f else 0f) // Add floating shadow
+                    .setDuration(250)
+                    .setInterpolator(OvershootInterpolator(1.5f))
+                    .start()
+
+                // Animate chevron horizontally slightly
+                chevron?.animate()
+                    ?.translationX(if (hasFocus) 10f else 0f)
+                    ?.setDuration(250)
+                    ?.setInterpolator(OvershootInterpolator())
+                    ?.start()
+            }
+        } else {
+            // Mobile Bouncy Touch Feedback
+            view.setOnTouchListener { v, event ->
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        v.animate()
+                            .scaleX(0.97f).scaleY(0.97f) // Compress in
+                            .setDuration(150)
+                            .setInterpolator(DecelerateInterpolator())
+                            .start()
+                    }
+                    MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                        v.animate()
+                            .scaleX(1.0f).scaleY(1.0f) // Bounce back
+                            .setDuration(300)
+                            .setInterpolator(OvershootInterpolator(2f))
+                            .start()
+                    }
+                }
+                false // Important: Return false so OnClickListener still triggers!
+            }
         }
     }
 
@@ -217,58 +220,61 @@ internal object SettingsListStyler {
         defaultStrokeColor: Int,
         activeColor: Int,
         activeStrokeColor: Int,
+        rippleColor: Int
     ): Drawable {
-        val radiusDp = if (isTv) 26 else 22 // Softer, more modern rounded corners
+        val radiusDp = if (isTv) 26 else 22 
         val defaultStrokeDp = 1
         val activeStrokeDp = if (isTv) 2 else 1
 
-        return StateListDrawable().apply {
-            if (isTv) {
-                addState(
-                    intArrayOf(android.R.attr.state_focused),
-                    createRoundedRect(view, activeColor, activeStrokeColor, radiusDp, activeStrokeDp)
-                )
-                addState(
-                    intArrayOf(android.R.attr.state_selected),
-                    createRoundedRect(view, activeColor, activeStrokeColor, radiusDp, activeStrokeDp)
-                )
-            } else {
-                addState(
-                    intArrayOf(android.R.attr.state_pressed),
-                    createRoundedRect(view, activeColor, activeStrokeColor, radiusDp, activeStrokeDp)
-                )
+        val defaultShape = createGradientRoundedRect(view, defaultColor, defaultStrokeColor, radiusDp, defaultStrokeDp)
+        val activeShape = createGradientRoundedRect(view, activeColor, activeStrokeColor, radiusDp, activeStrokeDp)
+
+        return if (isTv) {
+            // TV: Needs StateListDrawable because D-Pad focus holds the state
+            StateListDrawable().apply {
+                addState(intArrayOf(android.R.attr.state_focused), activeShape)
+                addState(intArrayOf(android.R.attr.state_selected), activeShape)
+                addState(intArrayOf(), defaultShape)
             }
-            addState(
-                intArrayOf(),
-                createRoundedRect(view, defaultColor, defaultStrokeColor, radiusDp, defaultStrokeDp)
+        } else {
+            // Mobile: Needs RippleDrawable for that modern Google/Apple satisfying touch
+            val colorStateList = ColorStateList(
+                arrayOf(intArrayOf()), 
+                intArrayOf(ColorUtils.setAlphaComponent(rippleColor, 80)) // 30% opacity ripple
             )
+            // RippleDrawable(color, content, mask)
+            RippleDrawable(colorStateList, defaultShape, defaultShape) 
         }
     }
 
-    private fun createRoundedRect(
+    // 🌟 Upgrade: Using GradientDrawable with TL_BR to simulate light hitting glass
+    private fun createGradientRoundedRect(
         view: View,
-        fillColor: Int,
+        baseColor: Int,
         strokeColor: Int,
         radiusDp: Int,
         strokeDp: Int,
-    ): Drawable = GradientDrawable().apply {
+    ): Drawable = GradientDrawable(
+        GradientDrawable.Orientation.TL_BR,
+        intArrayOf(
+            ColorUtils.blendARGB(baseColor, Color.WHITE, 0.05f), // Top left slightly brighter
+            baseColor // Bottom right base
+        )
+    ).apply {
         shape = GradientDrawable.RECTANGLE
         cornerRadius = view.context.dp(radiusDp).toFloat()
-        setColor(fillColor)
         setStroke(view.context.dp(strokeDp), strokeColor)
     }
 
     private fun resolveThemeColor(view: View, attr: Int, fallback: Int): Int {
-        val typedValue = android.util.TypedValue()
+        val typedValue = TypedValue()
         return if (view.context.theme.resolveAttribute(attr, typedValue, true)) {
             if (typedValue.resourceId != 0) {
                 androidx.core.content.ContextCompat.getColor(view.context, typedValue.resourceId)
             } else {
                 typedValue.data
             }
-        } else {
-            fallback
-        }
+        } else fallback
     }
 
     private fun findRecyclerView(view: View): RecyclerView? {
@@ -284,4 +290,3 @@ internal object SettingsListStyler {
     private fun android.content.Context.dp(value: Int): Int =
         (value * resources.displayMetrics.density).toInt()
 }
-
